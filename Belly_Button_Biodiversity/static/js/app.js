@@ -1,27 +1,63 @@
 function buildMetadata(sample) {
 
   // @TODO: Complete the following function that builds the metadata panel
-
+  var url = "/metadata/" + sample;
   // Use `d3.json` to fetch the metadata for a sample
+  d3.json(url).then((data) => {
     // Use d3 to select the panel with id of `#sample-metadata`
-
+    var divMetadata = d3.select("#sample-metadata");
     // Use `.html("") to clear any existing metadata
-
+    divMetadata.html("");
     // Use `Object.entries` to add each key and value pair to the panel
-    // Hint: Inside the loop, you will need to use d3 to append new
-    // tags for each key-value in the metadata.
-
+    Object.entries(data).forEach(([key, value]) => {
+      // Hint: Inside the loop, you will need to use d3 to append new
+      // tags for each key-value in the metadata.
+      divMetadata.append("div").text(`${key}: ${value}`);
+    });
+  });
     // BONUS: Build the Gauge Chart
     // buildGauge(data.WFREQ);
 }
 
 function buildCharts(sample) {
 
+  var url = "/samples/" + sample;
   // @TODO: Use `d3.json` to fetch the sample data for the plots
-
+  d3.json(url).then((data) => {
     // @TODO: Build a Bubble Chart using the sample data
-
+    var trace1 = [{
+      x: data.otu_ids,
+      y: data.sample_values,
+      text: data.otu_labels,
+      mode: 'markers',
+      marker: {
+        size: data.sample_values,
+        color: data.otu_ids
+      }
+    }];
+    
+    var layout = {
+      title: 'Bubble Chart',
+      // showlegend: false,
+      // height: 600,
+      // width: 600
+    };
+    
+    Plotly.newPlot('bubble', trace1, layout);
     // @TODO: Build a Pie Chart
+    var trace2 = [{
+      labels: data.otu_ids.slice(0, 10),
+      values: data.sample_values.slice(0, 10),
+      hovertext: data.otu_labels.slice(0, 10),
+      type: 'pie'
+    }];
+
+    var layout = {
+    title: "'Bar' Chart",
+    };
+
+    Plotly.newPlot("pie", trace2, layout);
+  });
     // HINT: You will need to use slice() to grab the top 10 sample_values,
     // otu_ids, and labels (10 each).
 }
