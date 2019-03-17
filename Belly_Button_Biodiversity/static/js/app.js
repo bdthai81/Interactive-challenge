@@ -14,9 +14,9 @@ function buildMetadata(sample) {
       // tags for each key-value in the metadata.
       divMetadata.append("div").text(`${key}: ${value}`);
     });
-  });
     // BONUS: Build the Gauge Chart
-    // buildGauge(data.WFREQ);
+    buildGauge(data.WFREQ);
+  });
 }
 
 function buildCharts(sample) {
@@ -37,10 +37,7 @@ function buildCharts(sample) {
     }];
     
     var layout = {
-      title: 'Bubble Chart',
-      // showlegend: false,
-      // height: 600,
-      // width: 600
+      xaxis: { title: 'OTU ID'}
     };
     
     Plotly.newPlot('bubble', trace1, layout);
@@ -53,13 +50,10 @@ function buildCharts(sample) {
     }];
 
     var layout = {
-    title: "'Bar' Chart",
     };
 
     Plotly.newPlot("pie", trace2, layout);
   });
-    // HINT: You will need to use slice() to grab the top 10 sample_values,
-    // otu_ids, and labels (10 each).
 }
 
 function init() {
